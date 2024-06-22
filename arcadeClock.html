@@ -19,37 +19,44 @@
             background: linear-gradient(135deg, #09afb4, #0d4f52);
             color: #ffffff;
             text-align: center;
+            padding: 1rem;
+            transition: all 0.5s ease;
         }
         .container {
             background: rgba(0, 0, 0, 0.5);
-            padding: 2rem;
+            padding: 1.5rem;
             border-radius: 15px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            margin-bottom: 1rem;
+            transition: transform 0.5s ease;
+            width: 100%;
+            max-width: 500px;
+            box-sizing: border-box;
         }
         .title {
-            font-size: 3rem;
+            font-size: 2.5rem;
             margin-bottom: 0.5rem;
             text-transform: uppercase;
             letter-spacing: 3px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
         .subtitle {
-            font-size: 1rem;
+            font-size: 0.9rem;
             margin-top: 0;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             opacity: 0.8;
         }
         .countdown-label {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
             text-transform: uppercase;
         }
         .countdown {
-            font-size: 3rem;
+            font-size: 2.5rem;
             font-weight: bold;
             display: flex;
             justify-content: center;
-            gap: 1rem;
+            gap: 0.5rem;
         }
         .countdown-item {
             display: flex;
@@ -58,31 +65,140 @@
         }
         .countdown-value {
             background: rgba(255, 255, 255, 0.1);
-            padding: 0.5rem 1rem;
+            padding: 0.5rem;
             border-radius: 8px;
-            min-width: 80px;
+            min-width: 60px;
         }
         .countdown-unit {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            margin-top: 0.3rem;
+        }
+        .button {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            width: 100%;
+            max-width: 500px;
+            box-sizing: border-box;
+        }
+        .button:hover {
+            background: #ff8787;
+        }
+        .goals-container, .results-container {
+            margin-top: 1rem;
+            width: 100%;
+            max-width: 500px;
+        }
+        .goals-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .input-group label {
+            margin-bottom: 0.3rem;
             font-size: 0.8rem;
             text-transform: uppercase;
-            margin-top: 0.5rem;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 0.5rem;
+            font-family: 'Orbitron', sans-serif;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 4px;
+            color: white;
+        }
+        .result-item {
+            margin-bottom: 1.5rem;
+        }
+        .result-label {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+        }
+        .result-value {
+            font-size: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem;
+            border-radius: 8px;
+            display: inline-block;
+            min-width: 100px;
+        }
+        .flex-container {
+            display: none;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1020px;
+            gap: 1rem;
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container" id="clock-container">
         <h1 class="title">The Arcade Clock</h1>
         <p class="subtitle">An unofficial countdown till the end of the arcade event</p>
         <div class="countdown-label">Countdown till the end</div>
-        <div id="countdown" class="countdown">
-            <!-- Countdown will be displayed here -->
+        <div id="countdown" class="countdown"></div>
+    </div>
+
+    <button class="button" id="set-goals-btn">Set Goals</button>
+
+    <div class="flex-container" id="flex-container">
+        <div class="container goals-container" id="goals-container">
+            <h2>Set Your Goals</h2>
+            <form class="goals-form" id="goals-form">
+                <div class="input-group">
+                    <label for="current-tickets">Current Tickets</label>
+                    <input type="number" id="current-tickets" name="current-tickets" required>
+                </div>
+                <div class="input-group">
+                    <label for="ticket-goal">Ticket Goal</label>
+                    <input type="number" id="ticket-goal" name="ticket-goal" required>
+                </div>
+                <div class="input-group">
+                    <label for="hours-under-approval">Hours Under Approval</label>
+                    <input type="number" id="hours-under-approval" name="hours-under-approval" required>
+                </div>
+                <button type="submit" class="button">Find Out</button>
+            </form>
+        </div>
+
+        <div class="container results-container" id="results-container">
+            <h2>Goals</h2>
+            <div class="result-item">
+                <div class="result-label">Hours Required</div>
+                <div class="result-value" id="hours-required">?</div>
+            </div>
+            <div class="result-item">
+                <div class="result-label">Hours Per Day</div>
+                <div class="result-value" id="hours-per-day">?</div>
+            </div>
+            <div class="result-item">
+                <div class="result-label">Hours Per Week</div>
+                <div class="result-value" id="hours-per-week">?</div>
+            </div>
         </div>
     </div>
 
     <script>
+        let targetDate = new Date('August 30, 2024 00:00:00');
+
         function updateCountdown() {
             const now = new Date();
-            const targetDate = new Date('August 30, 2024 00:00:00');
             const timeDifference = targetDate - now;
 
             if (timeDifference > 0) {
@@ -102,11 +218,38 @@
             }
         }
 
-        // Update the countdown every second
         setInterval(updateCountdown, 1000);
-
-        // Initial call to display the countdown immediately
         updateCountdown();
+
+        document.getElementById('set-goals-btn').addEventListener('click', function() {
+            document.body.style.justifyContent = 'flex-start';
+            document.body.style.paddingTop = '1rem';
+            document.getElementById('flex-container').style.display = 'flex';
+            this.style.display = 'none';
+        });
+
+        document.getElementById('goals-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const currentTickets = parseInt(document.getElementById('current-tickets').value);
+            const ticketGoal = parseInt(document.getElementById('ticket-goal').value);
+            const hoursUnderApproval = parseInt(document.getElementById('hours-under-approval').value);
+
+            const totalCurrentTickets = currentTickets + hoursUnderApproval;
+            const ticketsNeeded = ticketGoal - totalCurrentTickets;
+
+            const now = new Date();
+            const daysLeft = Math.ceil((targetDate - now) / (1000 * 60 * 60 * 24));
+            const weeksLeft = Math.ceil(daysLeft / 7);
+
+            const hoursRequired = ticketsNeeded;
+            const hoursPerDay = (hoursRequired / daysLeft).toFixed(2);
+            const hoursPerWeek = (hoursRequired / weeksLeft).toFixed(2);
+
+            document.getElementById('hours-required').textContent = hoursRequired;
+            document.getElementById('hours-per-day').textContent = hoursPerDay;
+            document.getElementById('hours-per-week').textContent = hoursPerWeek;
+        });
     </script>
 </body>
 </html>
