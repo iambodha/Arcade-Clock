@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Arcade Clock</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #09afb4, #0d4f52);
+            color: #ffffff;
+            text-align: center;
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+        .title {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .subtitle {
+            font-size: 1rem;
+            margin-top: 0;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+        }
+        .countdown-label {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+        .countdown {
+            font-size: 3rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+        .countdown-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .countdown-value {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            min-width: 80px;
+        }
+        .countdown-unit {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">The Arcade Clock</h1>
+        <p class="subtitle">An unofficial countdown till the end of the arcade event</p>
+        <div class="countdown-label">Countdown till the end</div>
+        <div id="countdown" class="countdown">
+            <!-- Countdown will be displayed here -->
+        </div>
+    </div>
+
+    <script>
+        function updateCountdown() {
+            const now = new Date();
+            const targetDate = new Date('August 30, 2024 00:00:00');
+            const timeDifference = targetDate - now;
+
+            if (timeDifference > 0) {
+                const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+                document.getElementById('countdown').innerHTML = `
+                    <div class="countdown-item"><div class="countdown-value">${days}</div><div class="countdown-unit">days</div></div>
+                    <div class="countdown-item"><div class="countdown-value">${hours}</div><div class="countdown-unit">hours</div></div>
+                    <div class="countdown-item"><div class="countdown-value">${minutes}</div><div class="countdown-unit">minutes</div></div>
+                    <div class="countdown-item"><div class="countdown-value">${seconds}</div><div class="countdown-unit">seconds</div></div>
+                `;
+            } else {
+                document.getElementById('countdown').innerHTML = '<div class="countdown-value">The date has arrived!</div>';
+            }
+        }
+
+        // Update the countdown every second
+        setInterval(updateCountdown, 1000);
+
+        // Initial call to display the countdown immediately
+        updateCountdown();
+    </script>
+</body>
+</html>
